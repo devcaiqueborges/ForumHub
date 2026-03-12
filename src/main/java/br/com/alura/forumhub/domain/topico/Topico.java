@@ -36,11 +36,9 @@ public class Topico {
     @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL)
     private List<Resposta> respostas = new ArrayList<>();
 
-    // Construtor vazio (obrigatório para o JPA/Banco de dados)
     public Topico() {
     }
 
-    // Construtor com todos os argumentos (Usado lá no TopicoController)
     public Topico(Long id, String titulo, String mensagem, LocalDateTime dataCriacao, String status, Usuario autor, Curso curso, List<Resposta> respostas) {
         this.id = id;
         this.titulo = titulo;
@@ -52,7 +50,6 @@ public class Topico {
         this.respostas = respostas;
     }
 
-    // Getters
     public Long getId() {
         return id;
     }

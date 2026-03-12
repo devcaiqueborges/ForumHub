@@ -11,7 +11,6 @@ public record DadosDetalhamentoTopico(
         String autor,
         String curso
 ) {
-    // Construtor para converter a entidade Topico neste DTO
     public DadosDetalhamentoTopico(Topico topico) {
         this(
                 topico.getId(),

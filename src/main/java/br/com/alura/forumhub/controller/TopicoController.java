@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/topicos")
 public class TopicoController {
@@ -51,24 +53,34 @@ public class TopicoController {
 
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id) {
-        var topico = topicoRepository.getReferenceById(id);
-        return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
+        Optional<Topico> topicoOptional = topicoRepository.findById(id);
+
+        if (topicoOptional.isPresent()) {
+            return ResponseEntity.ok(new DadosDetalhamentoTopico(topicoOptional.get()));
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizacaoTopico dados) {
-        var topico = topicoRepository.getReferenceById(dados.id());
+    public ResponseEntity atualizar(@PathVariable Long id, @RequestBody @Valid DadosAtualizacaoTopico dados) {
+        Optional<Topico> topicoOptional = topicoRepository.findById(id);
 
-        if (dados.titulo() != null) {
-            topico.setTitulo(dados.titulo());
+        if (topicoOptional.isPresent()) {
+            var topico = topicoOptional.get();
+
+            if (dados.titulo() != null) {
+                topico.setTitulo(dados.titulo());
+            }
+            if (dados.mensagem() != null) {
+                topico.setMensagem(dados.mensagem());
+            }
+
+            return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
         }
 
-        if (dados.mensagem() != null) {
-            topico.setMensagem(dados.mensagem());
-        }
-
-        return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")

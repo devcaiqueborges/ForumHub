@@ -16,6 +16,7 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 255)
     private String nome;
 
     private String email;
@@ -47,6 +48,7 @@ public class Usuario implements UserDetails {
     public String getSenha() {
         return senha;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
